@@ -1,30 +1,28 @@
 "use client";
 
+import React, { useState } from "react";
+import { auth } from "./firebase_setup";
+import { onAuthStateChanged } from "firebase/auth";
+import NoUserView from "./views/no_user";
 import { Button } from "@/components/ui/button";
-import { ContinueWithGoogle } from "./firebase_setup";
-import { useState } from "react";
-import Link from "next/link";
 
 export default function Home() {
 	const [user, setUser] = useState("");
 
+	onAuthStateChanged(auth, (user) => {
+		user ? setUser(user.displayName ?? user.email ?? "") : setUser("");
+	});
+
 	return (
-		<div className="flex flex-col gap-4 justify-center items-center h-screen">
-			{user !== "" ? (
-				<p>Hello, {user}!</p>
-			) : (
+		<>
+			{user ? (
 				<>
-					<Button onClick={ContinueWithGoogle}>
-						Continue with Google
-					</Button>
-					<p className="text-sm">
-						No account yet?{" "}
-						<Link href="/" className="text-blue-500">
-							Sign up here
-						</Link>
-					</p>
+					<p>Hello {user}!</p>
+					<Button onClick={() => auth.signOut()}>Sign Out</Button>
 				</>
+			) : (
+				<NoUserView />
 			)}
-		</div>
+		</>
 	);
 }
