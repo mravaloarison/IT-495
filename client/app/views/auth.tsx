@@ -7,7 +7,13 @@ import { ContinueWithGoogle } from "../firebase_setup";
 import SignUpForm from "./forms/sign_up";
 import SignInForm from "./forms/sign_in";
 
-export default function AuthenticationView(signup: boolean) {
+interface AuthenticationViewProps {
+	signup: boolean;
+}
+
+export default function AuthenticationView({
+	signup,
+}: AuthenticationViewProps) {
 	return (
 		<>
 			<div className="max-w-xs w-full flex flex-col gap-4">
@@ -24,7 +30,7 @@ export default function AuthenticationView(signup: boolean) {
 			<p className="text-sm text-gray-400">
 				{signup ? "Already have an account?" : "Don't have an account?"}{" "}
 				<Link
-					href={signup ? "/sign_up" : "/sign_in"}
+					href={signup ? "/sign_in" : "/sign_up"}
 					className="text-blue-500"
 				>
 					{signup ? "Sign in" : "Sign up"}
