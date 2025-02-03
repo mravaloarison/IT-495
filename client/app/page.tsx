@@ -15,7 +15,7 @@ export default function Home() {
 	useEffect(() => {
 		const checkUser = onAuthStateChanged(auth, (authUser) => {
 			if (authUser) {
-				setUser(authUser.displayName ?? authUser.email ?? "");
+				setUser(authUser.email ?? "");
 			} else {
 				setUser(null);
 			}
