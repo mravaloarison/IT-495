@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { auth } from "./firebase_setup";
+import { auth, isUser } from "./firebase_setup";
 import { onAuthStateChanged } from "firebase/auth";
 import NoUserView from "./views/no_user";
 import { Button } from "@/components/ui/button";
@@ -11,18 +11,38 @@ import FirstTimeUserView from "./views/first_time_user";
 export default function Home() {
 	const [user, setUser] = useState<string | null>(null);
 	const [isFirstTimeUser, setIsFirstTimeUser] = useState(true);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		const checkUser = onAuthStateChanged(auth, (authUser) => {
+		const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
 			if (authUser) {
 				setUser(authUser.email ?? "");
 			} else {
 				setUser(null);
 			}
+			setLoading(false);
 		});
 
-		return () => checkUser();
+		return () => unsubscribe();
 	}, []);
+
+	useEffect(() => {
+		if (user) {
+			setLoading(true);
+			isUser(user).then((exists) => {
+				setIsFirstTimeUser(!exists);
+				setLoading(false);
+			});
+		}
+	}, [user]);
+
+	if (loading) {
+		return (
+			<div className="flex h-screen justify-center items-center">
+				<p>Loading...</p>
+			</div>
+		);
+	}
 
 	return (
 		<>

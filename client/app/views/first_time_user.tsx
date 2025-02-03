@@ -67,7 +67,7 @@ export default function FirstTimeUserView({ user }: { user: string | null }) {
 			},
 		};
 
-		addUser(data);
+		addUser(data).then(() => location.reload());
 	}
 
 	return (
