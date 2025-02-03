@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { addDoc, collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDqOD6L7bshB9-PRQ3UGccvZa_hQKwO0nI",
@@ -23,4 +24,11 @@ export function ContinueWithGoogle() {
     const errorCode = error.code;
     console.log(errorCode);
   });
+}
+
+// DB
+const db = getFirestore(app);
+
+export async function addUser(data: any) {
+  await setDoc(doc(collection(db, "users"), data.email), data);
 }
