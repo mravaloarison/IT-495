@@ -30,6 +30,26 @@ export default function FirstTimeUserView({ user }: { user: string | null }) {
 		console.log(isProfileFormCompleted, "state of isProfileFormCompleted");
 	}, [isAccountTypeFormCompleted, isContactInformationFormCompleted]);
 
+	const formatDate = (isoString: string) => {
+		const date = new Date(isoString);
+		return date.toLocaleDateString("en-US", {
+			month: "2-digit",
+			day: "2-digit",
+			year: "numeric",
+		});
+	};
+
+	const formatTime = (isoString: string) => {
+		const date = new Date(isoString);
+		return date.toLocaleTimeString("en-US", {
+			hour: "2-digit",
+			minute: "2-digit",
+			hour12: true,
+		});
+	};
+
+	const createdDate = new Date().toISOString();
+
 	function CreateProfile() {
 		const accountType = localStorage.getItem("accountType");
 		const contactInformation = JSON.parse(
@@ -40,6 +60,11 @@ export default function FirstTimeUserView({ user }: { user: string | null }) {
 			accountType: accountType,
 			...contactInformation,
 			email: user,
+			accountCreatedAt: {
+				date: formatDate(createdDate),
+				time: formatTime(createdDate),
+				iso: createdDate,
+			},
 		};
 
 		addUser(data);
