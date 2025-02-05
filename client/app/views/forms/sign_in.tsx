@@ -66,7 +66,7 @@ export default function SignInForm() {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex flex-col gap-4"
+				className="flex flex-col gap-6"
 			>
 				<FormField
 					control={form.control}
@@ -111,7 +111,7 @@ export default function SignInForm() {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit">Continue</Button>
+				<Button type="submit">Login</Button>
 			</form>
 		</Form>
 	);

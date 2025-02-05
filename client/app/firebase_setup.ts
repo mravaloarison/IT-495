@@ -39,3 +39,9 @@ export async function isUser(email: string) {
   const docSnap = await getDoc(docRef);
   return docSnap.exists();
 }
+
+export async function getUser(email: string) {
+  const docRef = doc(db, "users", email);
+  const docSnap = await getDoc(docRef);
+  return docSnap.data();
+}
