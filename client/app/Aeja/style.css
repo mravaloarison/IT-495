@@ -1,0 +1,193 @@
+*{
+    margin: 0
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+        font-family: 'Old Standard TT', serif;
+        font-weight: 400;
+        font-style: normal;
+}
+.navbar{
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+nav{
+    flex: 1;
+    text-align: right;
+}
+nav ul{
+    display: inline-block;
+    list-style: none;
+}
+nav ul li{
+    display: inline-block;
+    margin-right: 20px;
+}
+.navbar a {
+    position: relative;
+    text-decoration: none; /* Remove default underline */
+    padding-bottom: 5px; /* Space for the hover effect */
+    color: black;
+}
+.navbar a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px; /* Adjust thickness of underline */
+    background: #0034B4;
+    border-radius: 5px;
+    transform: translateX(-50%);
+    transition: width 0.3s ease-in-out;
+}
+.navbar a:hover::after {
+    width: 100%;
+}
+
+.navbar img {
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+    display: block;
+}
+
+.navbar img:hover {
+    opacity: 0.7; /* Makes it look interactive */
+}
+
+p{
+    color: black;
+    margin: 0;
+}
+h1{
+    text-align: center;
+    color: black;
+    margin: 0;
+    padding-bottom: 30px;
+}
+.container{
+    max-width: 1300px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.row{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.col-2 p{
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Keeps content centered horizontally */
+    justify-content: flex-start; /* Aligns text to the top */
+    padding-top: 50px; /* Adjust this to move text lower */
+    padding: 150px 20px; /* Adjust padding to move text */
+    font-weight: bold; /* Make text stand out */
+    color: black; /* Ensure good contrast */
+    /* text-shadow: 2px 2px 5px rgba(0, 52, 180, 0.9); Shadow effect */
+}
+.col-2 a{
+    font-size: 17px;
+}
+.col-2 {
+    background-image: url('Images/shopping-cart-icon.jpg.webp.png'); /* Path to your image */
+    background-size: contain; /* Makes the image cover the entire div */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents image from repeating */
+    width: 90%; /* Makes sure the div spans the full width */
+    min-height: 400px; /* Set a minimum height for the div */
+    display: flex; /* Allows content to be positioned inside */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    padding: 20px; /* Optional padding */
+}
+.col-2 h1{
+    font-size: 50px;
+    line-height: 60px;
+    margin: 20px 0;
+}
+.cart-text {
+    margin-bottom: -150px; /* Moves the text down */
+    text-align: center;
+    font-size: 25px;
+}
+.btn{
+    display: inline-block;
+    background: #4ABEF5;
+    color: #fff;
+    padding: 8px 25px;
+    margin: 30px 0;
+    border-radius: 30px;
+    transition: background 0.5s;
+    text-decoration: none;
+}
+.btn:hover{
+    background: #0034B4;
+}
+.header{
+    background-color:#fff;
+}
+.header .row{
+    margin-top: 0px;
+}
+.col-3{
+    flex-basis: 25%;
+    padding: 10px;
+    min-width: 200px;
+    margin-bottom: 50px;
+}
+.col-3 img{
+    /* width: 100%; */
+    width: 200px;
+    height: 250px;
+}
+.col-4{
+    flex-basis: 25%;
+    padding: 10px;
+    min-width: 200px;
+    margin-bottom: 50px;
+}
+.col-4 img{
+    /* width: 100%; */
+    width: 200px;
+    height: 250px;
+    
+}
+.col-4 p{
+    font-size: 14px;
+}
+.rating .fa-sharp{
+    color: #0034B4;
+}
+.title{
+    text-align: center;
+    position: relative;
+    text-decoration: none;
+    padding-bottom: 5px;
+}
+.title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 4px;
+    background: #0034B4;
+    border-radius: 5px;
+    transform: translateX(-50%);
+    transition: width 0.3s ease-in-out; /* Smooth animation */
+}
+.title:hover::after {
+    width: 200px;
+}
+.h4{
+    color: black;
+    font-weight: normal;
+}
