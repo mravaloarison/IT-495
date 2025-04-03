@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import AlertError from "./alert_error";
+import { addUserToDB, auth } from "@/app/firebase_utils";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function NewCustomerView() {
 	const [fullname, setFullname] = useState("");
@@ -55,14 +57,32 @@ export default function NewCustomerView() {
 			setErrorMessage("All fields are required");
 			return;
 		}
-		// Handle form submission logic here
-		console.log("Form submitted:", {
-			fullname,
-			email,
-			password,
-			phoneNumber,
-			confirmPassword,
-		});
+
+		const data = {
+			fullname: fullname,
+			email: email,
+			password: password,
+			phone_number: phoneNumber,
+			type: "customer",
+		};
+
+		addUserToDB(data);
+
+		createUserWithEmailAndPassword(auth, email, password)
+			.then(() => {
+				window.location.href = "/dashboard";
+			})
+			.catch((error) => {
+				const code = error.code;
+				const message = error.message;
+				setError(true);
+
+				if (code === "auth/invalid-email") {
+					setErrorMessage("Invalid email");
+				} else {
+					setErrorMessage(message);
+				}
+			});
 	};
 
 	return (
