@@ -30,5 +30,7 @@ export async function isUserAlreadyInDB(email: string) {
 export async function getUserFromDB(email: string) {
     const docRef = doc(db, "users", email);
     const docSnap = await getDoc(docRef);
+
+    // console.log("User data:", docSnap.data());
     return docSnap.data();
 }

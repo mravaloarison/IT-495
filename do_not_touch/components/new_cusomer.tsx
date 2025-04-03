@@ -24,6 +24,7 @@ export default function NewCustomerView() {
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [error, setError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	const handleFullnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFullname(e.target.value);
@@ -46,6 +47,7 @@ export default function NewCustomerView() {
 	};
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+		setLoading(true);
 
 		if (password !== confirmPassword) {
 			setError(true);
@@ -61,16 +63,23 @@ export default function NewCustomerView() {
 		const data = {
 			fullname: fullname,
 			email: email,
-			password: password,
 			phone_number: phoneNumber,
 			type: "customer",
 		};
 
-		addUserToDB(data);
-
 		createUserWithEmailAndPassword(auth, email, password)
 			.then(() => {
-				window.location.href = "/dashboard";
+				addUserToDB(data)
+					.then(() => {
+						setLoading(false);
+
+						window.location.href = "/dashboard";
+					})
+					.catch((error) => {
+						setLoading(false);
+						setError(true);
+						setErrorMessage(error.message);
+					});
 			})
 			.catch((error) => {
 				const code = error.code;
@@ -82,6 +91,8 @@ export default function NewCustomerView() {
 				} else {
 					setErrorMessage(message);
 				}
+
+				setLoading(false);
 			});
 	};
 
@@ -139,7 +150,9 @@ export default function NewCustomerView() {
 				</div>
 			</CardContent>
 			<CardFooter>
-				<Button onClick={handleSubmit}>Sign up</Button>
+				<Button onClick={handleSubmit} disabled={loading}>
+					{loading ? "Loading..." : "Sign up"}
+				</Button>
 			</CardFooter>
 			<AlertError
 				errorMessage={errorMessage}
