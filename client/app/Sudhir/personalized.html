@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Fit Finders</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <h2>Fit Finders</h2>
+            <ul>
+                <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#"><i class="fas fa-shopping-bag"></i> Orders</a></li>
+                <li><a href="#"><i class="fas fa-heart"></i> Wishlist</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header with Quick Actions -->
+            <div class="header">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for clothing...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="quick-actions">
+                    <button><i class="fas fa-box"></i> Track Order</button>
+                    <button><i class="fas fa-redo"></i> Reorder</button>
+                    <button><i class="fas fa-headset"></i> Support</button>
+                </div>
+            </div>
+
+            <!-- Welcome Message -->
+            <div class="welcome-message">
+                <h1>Welcome back, John!</h1>
+                <p>Here's what's happening with your account today.</p>
+            </div>
+
+            <!-- Order Tracking -->
+            <div class="order-tracking">
+                <h2>Your Current Order</h2>
+                <div class="tracking-progress">
+                    <div class="step completed">
+                        <i class="fas fa-check"></i>
+                        <p>Order Placed</p>
+                    </div>
+                    <div class="step active">
+                        <i class="fas fa-tshirt"></i>
+                        <p>Processing</p>
+                    </div>
+                    <div class="step">
+                        <i class="fas fa-truck"></i>
+                        <p>Shipped</p>
+                    </div>
+                    <div class="step">
+                        <i class="fas fa-home"></i>
+                        <p>Delivered</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="recent-orders">
+                <h2>Recent Orders</h2>
+                <div class="order-list">
+                    <div class="order-card">
+                        <img src="https://via.placeholder.com/100" alt="Order 1">
+                        <div class="order-details">
+                            <h4>Order #12345</h4>
+                            <p>Status: Shipped</p>
+                            <p>Date: 2023-10-01</p>
+                        </div>
+                        <button>Track</button>
+                    </div>
+                    <div class="order-card">
+                        <img src="https://via.placeholder.com/100" alt="Order 2">
+                        <div class="order-details">
+                            <h4>Order #12346</h4>
+                            <p>Status: Processing</p>
+                            <p>Date: 2023-10-05</p>
+                        </div>
+                        <button>View</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personalized Recommendations -->
+            <div class="recommendations">
+                <h2>Recommended for You</h2>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/150" alt="Product 1">
+                        <h4>Men's Casual Shirt</h4>
+                        <p>$29.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/150" alt="Product 2">
+                        <h4>Women's Summer Dress</h4>
+                        <p>$49.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/150" alt="Product 3">
+                        <h4>Unisex Hoodie</h4>
+                        <p>$39.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
