@@ -13,15 +13,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import AlertError from "./alert_error";
+import { addUserToDB, auth } from "@/app/firebase_utils";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function NewDriverView() {
 	const [fullname, setFullname] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [driverLicenseNumber, setDriverLicenseNumber] = useState("");
 	const [error, setError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	const handleFullnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFullname(e.target.value);
@@ -33,6 +37,12 @@ export default function NewDriverView() {
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value);
+	};
+
+	const handleConfirmPasswordChange = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setConfirmPassword(e.target.value);
 	};
 
 	const handlePhoneNumberChange = (
@@ -61,14 +71,42 @@ export default function NewDriverView() {
 			setErrorMessage("All fields are required");
 			return;
 		}
-		// Handle form submission logic here
-		console.log("Form submitted:", {
-			fullname,
-			email,
-			password,
-			phoneNumber,
-			driverLicenseNumber,
-		});
+
+		const data = {
+			fullname: fullname,
+			email: email,
+			phone_number: phoneNumber,
+			driver_license_number: driverLicenseNumber,
+			type: "driver",
+		};
+
+		createUserWithEmailAndPassword(auth, email, password)
+			.then(() => {
+				addUserToDB(data)
+					.then(() => {
+						setLoading(false);
+
+						window.location.href = "/dashboard";
+					})
+					.catch((error) => {
+						setLoading(false);
+						setError(true);
+						setErrorMessage(error.message);
+					});
+			})
+			.catch((error) => {
+				const code = error.code;
+				const message = error.message;
+				setError(true);
+
+				if (code === "auth/invalid-email") {
+					setErrorMessage("Invalid email");
+				} else {
+					setErrorMessage(message);
+				}
+
+				setLoading(false);
+			});
 	};
 
 	return (
@@ -104,6 +142,15 @@ export default function NewDriverView() {
 						placeholder="Password"
 						value={password}
 						onChange={handlePasswordChange}
+					/>
+				</div>
+				<div className="space-y-2">
+					<Label htmlFor="confirm_password">Confirm Password</Label>
+					<Input
+						type="password"
+						placeholder="Confirm Password"
+						value={confirmPassword}
+						onChange={handleConfirmPasswordChange}
 					/>
 				</div>
 				<div className="space-y-2">
