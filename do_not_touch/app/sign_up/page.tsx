@@ -6,9 +6,11 @@ import NewDriverView from "@/components/new_driver";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+	const router = useRouter();
+
 	return (
 		<div className="h-screen">
 			<div>
@@ -31,15 +33,17 @@ export default function Page() {
 				<TabsContent value="driver">
 					<NewDriverView />
 				</TabsContent>
-				<Link href="no_user" className="py-6">
-					<Button
-						variant="secondary"
-						className="hover:cursor-pointer"
-					>
-						<ArrowLeft />
-						Go back
-					</Button>
-				</Link>
+				<Button
+					variant="secondary"
+					className="hover:cursor-pointer my-6"
+					onClick={() => {
+						router.replace("/no_user");
+						router.refresh();
+					}}
+				>
+					<ArrowLeft />
+					Go back
+				</Button>
 			</Tabs>
 		</div>
 	);

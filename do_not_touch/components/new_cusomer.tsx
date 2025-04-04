@@ -15,8 +15,10 @@ import { useState } from "react";
 import AlertError from "./alert_error";
 import { addUserToDB, auth } from "@/app/firebase_utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 export default function NewCustomerView() {
+	const router = useRouter();
 	const [fullname, setFullname] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -52,11 +54,13 @@ export default function NewCustomerView() {
 		if (password !== confirmPassword) {
 			setError(true);
 			setErrorMessage("Passwords do not match");
+			setLoading(false);
 			return;
 		}
 		if (!fullname || !email || !password || !phoneNumber) {
 			setError(true);
 			setErrorMessage("All fields are required");
+			setLoading(false);
 			return;
 		}
 
@@ -73,7 +77,8 @@ export default function NewCustomerView() {
 					.then(() => {
 						setLoading(false);
 
-						window.location.href = "/dashboard";
+						router.replace("/dashboard");
+						router.refresh();
 					})
 					.catch((error) => {
 						setLoading(false);
@@ -150,7 +155,11 @@ export default function NewCustomerView() {
 				</div>
 			</CardContent>
 			<CardFooter>
-				<Button onClick={handleSubmit} disabled={loading}>
+				<Button
+					className="hover:cursor-pointer"
+					onClick={handleSubmit}
+					disabled={loading}
+				>
 					{loading ? "Loading..." : "Sign up"}
 				</Button>
 			</CardFooter>

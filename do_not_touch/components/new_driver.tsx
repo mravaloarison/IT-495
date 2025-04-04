@@ -15,8 +15,10 @@ import { useState } from "react";
 import AlertError from "./alert_error";
 import { addUserToDB, auth } from "@/app/firebase_utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 export default function NewDriverView() {
+	const router = useRouter();
 	const [fullname, setFullname] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -59,6 +61,14 @@ export default function NewDriverView() {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+		setLoading(true);
+
+		if (password !== confirmPassword) {
+			setError(true);
+			setErrorMessage("Passwords do not match");
+			setLoading(false);
+			return;
+		}
 
 		if (
 			!fullname ||
@@ -69,6 +79,7 @@ export default function NewDriverView() {
 		) {
 			setError(true);
 			setErrorMessage("All fields are required");
+			setLoading(false);
 			return;
 		}
 
@@ -86,7 +97,8 @@ export default function NewDriverView() {
 					.then(() => {
 						setLoading(false);
 
-						window.location.href = "/dashboard";
+						router.replace("/dashboard");
+						router.refresh();
 					})
 					.catch((error) => {
 						setLoading(false);
@@ -173,7 +185,13 @@ export default function NewDriverView() {
 				</div>
 			</CardContent>
 			<CardFooter>
-				<Button onClick={handleSubmit}>Sign up</Button>
+				<Button
+					className="hover:cursor-pointer"
+					onClick={handleSubmit}
+					disabled={loading}
+				>
+					{loading ? "Loading..." : "Sign up"}
+				</Button>
 			</CardFooter>
 			<AlertError
 				errorMessage={errorMessage}

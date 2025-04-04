@@ -4,8 +4,14 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { auth, getUserFromDB } from "../firebase_utils";
 import { onAuthStateChanged } from "firebase/auth";
+import { LogOut, Settings } from "lucide-react";
+import { useRouter } from "next/navigation";
+import CustomerView from "@/components/customer_view";
+import DriverView from "@/components/driver_view";
+import CompanyView from "@/components/company_view";
 
 export default function Page() {
+	const router = useRouter();
 	const [user, setUser] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [userType, setUserType] = useState<string | null>(null);
@@ -15,7 +21,9 @@ export default function Page() {
 			if (authUser) {
 				setUser(authUser.email);
 			} else {
-				window.location.href = "/";
+				// redirect to no user page
+				router.replace("/no_user");
+				router.refresh();
 			}
 			setLoading(false);
 		});
@@ -45,18 +53,47 @@ export default function Page() {
 	return (
 		<div>
 			{user ? (
-				<div className="max-w-2xl mx-auto flex flex-col gap-6 items-center justify-center min-h-screen">
-					<Button
-						onClick={() => {
-							auth.signOut();
-						}}
-					>
-						Sign out
-					</Button>
-					<div className="flex items-center justify-center gap-6">
-						{userType && (
-							<p className="text-2xl font-semibold">{userType}</p>
-						)}
+				<div className="max-w-4xl mx-auto">
+					<div className="flex flex-col items-center justify-between min-h-screen h-full p-4">
+						<header className="flex justify-between items-center w-full border-b pb-4">
+							<div className="flex gap-2 items-center text-gray-500">
+								<Settings />
+								<h1 className="font-semibold ">{user}</h1>
+							</div>
+							<Button
+								variant="outline"
+								onClick={() => {
+									setLoading(true);
+									auth.signOut();
+								}}
+								className="hover:cursor-pointer"
+								disabled={loading}
+							>
+								<LogOut />
+								Sign out
+							</Button>
+						</header>
+						<main className="px-4">
+							{userType && (
+								<div>
+									{userType === "customer" ? (
+										<CustomerView />
+									) : userType === "driver" ? (
+										<DriverView />
+									) : userType === "company" ? (
+										<CompanyView />
+									) : (
+										<div className="flex items-center justify-center h-screen">
+											Sorry could not find what type of
+											user you are
+										</div>
+									)}
+								</div>
+							)}
+						</main>
+						<footer className="font-semibold text-xs text-gray-500">
+							&#169; by Rava
+						</footer>
 					</div>
 				</div>
 			) : (

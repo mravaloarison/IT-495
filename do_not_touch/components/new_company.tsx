@@ -15,8 +15,10 @@ import { useState } from "react";
 import AlertError from "./alert_error";
 import { addUserToDB, auth } from "@/app/firebase_utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 export default function NewCompanyView() {
+	const router = useRouter();
 	const [companyName, setCompanyName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -54,15 +56,19 @@ export default function NewCompanyView() {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+		setLoading(true);
+
 		if (password !== confirmPassword) {
 			setError(true);
 			setErrorMessage("Passwords do not match");
+			setLoading(false);
 			return;
 		}
 
 		if (!companyName || !email || !password || !phoneNumber) {
 			setError(true);
 			setErrorMessage("All fields are required");
+			setLoading(false);
 			return;
 		}
 		const data = {
@@ -78,7 +84,8 @@ export default function NewCompanyView() {
 					.then(() => {
 						setLoading(false);
 
-						window.location.href = "/dashboard";
+						router.replace("/dashboard");
+						router.refresh();
 					})
 					.catch((error) => {
 						setLoading(false);
@@ -155,7 +162,11 @@ export default function NewCompanyView() {
 				</div>
 			</CardContent>
 			<CardFooter>
-				<Button onClick={handleSubmit} disabled={loading}>
+				<Button
+					onClick={handleSubmit}
+					disabled={loading}
+					className="hover:cursor-pointer"
+				>
 					{loading ? "Loading..." : "Sign up"}
 				</Button>
 			</CardFooter>
