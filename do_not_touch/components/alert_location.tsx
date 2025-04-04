@@ -12,7 +12,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Input } from "./ui/input";
-import { Search } from "lucide-react";
+import { MapPin, Search } from "lucide-react";
+
+interface SearchFormProps {
+	displayName: {
+		text: string;
+		languageCode: string;
+	};
+	formattedAddress: string;
+	id: string;
+}
 
 export default function AlertLocation({
 	user,
@@ -27,9 +36,34 @@ export default function AlertLocation({
 }) {
 	const [open, setOpen] = useState(false);
 	const [newLocation, setNewLocation] = useState("");
+	const [autocompleteResults, setAutocompleteResults] = useState<
+		SearchFormProps[]
+	>([]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setNewLocation(e.target.value);
+
+		const formData = new FormData();
+		formData.append("search", e.target.value);
+
+		fetch("/api/place_autocomplete", {
+			method: "POST",
+			body: formData,
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				try {
+					const places = data.places;
+
+					console.log("Autocomplete results: ", places);
+
+					if (places) {
+						setAutocompleteResults(places);
+					}
+				} catch {
+					console.log("No places found");
+				}
+			});
 	};
 
 	useEffect(() => {
@@ -60,22 +94,32 @@ export default function AlertLocation({
 					/>
 					<Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50" />
 				</div>
-				<div>
-					<Button variant="link">
-						434 Main street, new york, new rochelle, 10801
-					</Button>
-					<Button variant="link">
-						434 Main street, new york, new rochelle, 10801
-					</Button>
-					<Button variant="link">
-						434 Main street, new york, new rochelle, 10801
-					</Button>
-				</div>
+				{autocompleteResults.length > 0 && (
+					<div>
+						{autocompleteResults.map((place) => (
+							<Button
+								key={place.id}
+								variant="link"
+								onClick={() => {
+									setNewLocation(place.formattedAddress);
+									setAutocompleteResults([]);
+								}}
+							>
+								<MapPin />
+								{place.formattedAddress}
+							</Button>
+						))}
+					</div>
+				)}
 				<AlertDialogFooter>
-					<AlertDialogCancel onClick={() => callback(curentLocation)}>
+					<AlertDialogCancel
+						onClick={() => callback(curentLocation)}
+						className="mt-2 md:mt-0"
+					>
 						Cancel
 					</AlertDialogCancel>
 					<Button
+						className="mt-2 md:mt-0"
 						onClick={() => {
 							newLocation === ""
 								? callback(curentLocation)
