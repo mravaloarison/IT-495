@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter } from "./ui/card";
 import { useState } from "react";
 import AlertLocation from "./alert_location";
 
-export default function CompanyView() {
+export default function CompanyView(props: { user: string }) {
 	const [isChangingLocation, setIsChangingLocation] = useState(false);
 	const [location, setLocation] = useState("123 Main St, City, State, 10801");
 
@@ -49,7 +49,7 @@ export default function CompanyView() {
 				<div></div>
 			</div>
 			<AlertLocation
-				user="rakoto@gmail.com"
+				user={props.user}
 				isOpen={isChangingLocation}
 				curentLocation={location}
 				callback={(newLocation) => {

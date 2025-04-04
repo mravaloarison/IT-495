@@ -81,7 +81,7 @@ export default function Page() {
 									) : userType === "driver" ? (
 										<DriverView />
 									) : userType === "company" ? (
-										<CompanyView />
+										<CompanyView user={user} />
 									) : (
 										<div className="flex items-center justify-center h-screen">
 											Sorry could not find what type of
