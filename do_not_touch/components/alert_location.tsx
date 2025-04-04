@@ -94,23 +94,25 @@ export default function AlertLocation({
 					/>
 					<Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50" />
 				</div>
-				{autocompleteResults.length > 0 && (
-					<div>
-						{autocompleteResults.map((place) => (
-							<Button
-								key={place.id}
-								variant="link"
-								onClick={() => {
-									setNewLocation(place.formattedAddress);
-									setAutocompleteResults([]);
-								}}
-							>
-								<MapPin />
-								{place.formattedAddress}
-							</Button>
-						))}
-					</div>
-				)}
+				<div className="relative">
+					{autocompleteResults.length > 0 && (
+						<div className="absolute z-10 w-full overflow-auto rounded-md border bg-white shadow-lg ring-1 ring-gray-200 ring-opacity-1 focus:outline-none">
+							{autocompleteResults.map((place) => (
+								<Button
+									key={place.id}
+									variant="link"
+									onClick={() => {
+										setNewLocation(place.formattedAddress);
+										setAutocompleteResults([]);
+									}}
+								>
+									<MapPin />
+									{place.formattedAddress}
+								</Button>
+							))}
+						</div>
+					)}
+				</div>
 				<AlertDialogFooter>
 					<AlertDialogCancel
 						onClick={() => callback(curentLocation)}
