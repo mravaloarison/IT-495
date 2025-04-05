@@ -113,7 +113,7 @@ export default function AlertLocation({
 						</div>
 					)}
 				</div>
-				<AlertDialogFooter>
+				<AlertDialogFooter className="flex gap-4">
 					<AlertDialogCancel
 						onClick={() => callback(curentLocation)}
 						className="mt-2 md:mt-0"
