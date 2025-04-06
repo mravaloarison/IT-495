@@ -77,7 +77,7 @@ export default function Page() {
 							{userType && (
 								<div>
 									{userType === "customer" ? (
-										<CustomerView />
+										<CustomerView user={user} />
 									) : userType === "driver" ? (
 										<DriverView />
 									) : userType === "company" ? (

@@ -13,14 +13,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 
-export default function AlertUpdateCompanyDetails(props: {
+export default function AlertUpdatePersonalInfo(props: {
 	isOpen: boolean;
 	user: string;
 	onOpenChange: (open: boolean) => void;
-	onConfirm: (companyName: string, location: string) => void;
+	onConfirm: (name: string, logoURL: string) => void;
 }) {
 	const [open, setOpen] = useState(false);
-	const [companyName, setCompanyName] = useState("");
+	const [Name, setName] = useState("");
 	const [logoURL, setLogoURL] = useState("");
 
 	useEffect(() => {
@@ -31,25 +31,20 @@ export default function AlertUpdateCompanyDetails(props: {
 
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
-			<AlertDialogTrigger asChild>
-				<Button variant="outline" className="hidden">
-					Update Company Details
-				</Button>
-			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>Update Company Details</AlertDialogTitle>
+					<AlertDialogTitle>Update Details</AlertDialogTitle>
 					<AlertDialogDescription>
-						Update your company name and logo.
+						Update your account details here.
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<div className="grid gap-4 py-4">
 					<div className="flex flex-col gap-2">
-						<p className="text-sm text-gray-500">Company Name</p>
+						<p className="text-sm text-gray-500">Name</p>
 						<Input
-							value={companyName}
-							placeholder="Company Name (eg: Nike)"
-							onChange={(e) => setCompanyName(e.target.value)}
+							value={Name}
+							placeholder="Type a name here"
+							onChange={(e) => setName(e.target.value)}
 						/>
 					</div>
 					<div className="flex flex-col gap-2">
@@ -74,7 +69,7 @@ export default function AlertUpdateCompanyDetails(props: {
 					<Button
 						variant="secondary"
 						onClick={() => {
-							props.onConfirm(companyName, logoURL);
+							props.onConfirm(Name, logoURL);
 							setOpen(false);
 						}}
 					>

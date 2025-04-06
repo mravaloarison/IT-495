@@ -7,7 +7,7 @@ import { useState } from "react";
 import AlertLocation from "./alert_location";
 import CompanyInventoryView from "./company_inventory";
 import AlertAddToInventory from "./alert_add_to_inventory";
-import AlertUpdateCompanyDetails from "./alert_to_update_company_details";
+import AlertUpdatePersonalInfo from "./alert_to_update_PI";
 
 export default function CompanyView(props: { user: string }) {
 	const [isChangingLocation, setIsChangingLocation] = useState(false);
@@ -98,7 +98,7 @@ export default function CompanyView(props: { user: string }) {
 				}}
 			/>
 
-			<AlertUpdateCompanyDetails
+			<AlertUpdatePersonalInfo
 				isOpen={isUpdatingCompanyDetailsOpen}
 				user={props.user}
 				onOpenChange={setIsUpdatingCompanyDetailsOpen}
