@@ -199,8 +199,8 @@ export default function ChatBox() {
 				{/* Loading indicator */}
 				{isLoading && (
 					<div className="flex items-start gap-3">
-						<Avatar className="h-8 w-8 bg-primary">
-							<span className="text-xs text-white">AI</span>
+						<Avatar className="h-8 w-8 border flex items-center justify-center text-gray-300">
+							<Bot />
 						</Avatar>
 						<div className="space-y-2">
 							<Skeleton className="h-4 w-40" />
