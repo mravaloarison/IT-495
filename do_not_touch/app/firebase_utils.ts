@@ -16,6 +16,7 @@ const db = getFirestore(app);
 
 export const auth = getAuth(app);
 
+// BASICS
 export async function addUserToDB(data: any) {
     const docRef = doc(db, "users", data.email);
     await setDoc(docRef, data);
@@ -34,3 +35,42 @@ export async function getUserFromDB(email: string) {
     // console.log("User data:", docSnap.data());
     return docSnap.data();
 }
+
+
+// ADD TO BIG THREE
+export async function addUserToDriverDB(data: any) {
+    const docRef = doc(db, "drivers", data.email);
+    
+    const newData = {
+        fullName: data.fullname,
+        phoneNumber: data.phone_number,
+        driverLicenseNumber: data.driver_license_number,
+    }
+
+    await setDoc(docRef, newData);
+}
+
+export async function addUserToCustomerDB(data: any) {
+    console.log("Adding user to customer DB:", data);
+    const docRef = doc(db, "customers", data.email);
+    
+    const newData = {
+        fullName: data.fullname,
+        phoneNumber: data.phone_number,
+    }
+
+    await setDoc(docRef, newData);
+}
+
+export async function addUserToCompanyDB(data: any) {
+    const docRef = doc(db, "companies", data.email);
+    
+    const newData = {
+        companyName: data.company_name,
+        phoneNumber: data.phone_number,
+    }
+
+    await setDoc(docRef, newData);
+}
+
+// UPDATE BIG THREE

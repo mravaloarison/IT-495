@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import AlertError from "./alert_error";
-import { addUserToDB, auth } from "@/app/firebase_utils";
+import { addUserToCompanyDB, addUserToDB, auth } from "@/app/firebase_utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 
@@ -82,10 +82,22 @@ export default function NewCompanyView() {
 			.then(() => {
 				addUserToDB(data)
 					.then(() => {
-						setLoading(false);
+						addUserToCompanyDB(data)
+							.then(() => {
+								setLoading(false);
 
-						router.replace("/dashboard");
-						router.refresh();
+								router.replace("/dashboard");
+								router.refresh();
+							})
+							.catch((error) => {
+								console.log(
+									"Error adding user to company DB",
+									error
+								);
+								setLoading(false);
+								setError(true);
+								setErrorMessage(error.message);
+							});
 					})
 					.catch((error) => {
 						setLoading(false);
