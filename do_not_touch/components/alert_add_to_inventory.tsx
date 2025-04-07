@@ -20,7 +20,7 @@ export default function AlertAddToInventory(props: {
 		name: string;
 		image: string;
 		price: number;
-		section: string;
+		category: string;
 	}) => void;
 }) {
 	const [open, setOpen] = useState(false);
@@ -103,7 +103,7 @@ export default function AlertAddToInventory(props: {
 								name: itemName,
 								image: itemImage,
 								price: itemPrice,
-								section: itemSection,
+								category: itemSection,
 							});
 							setOpen(false);
 							props.onOpenChange(false);

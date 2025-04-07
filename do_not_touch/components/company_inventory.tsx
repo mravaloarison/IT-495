@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { collection, getDocs, doc } from "firebase/firestore";
+import { db } from "@/app/firebase_utils";
 import { Pen, Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -8,82 +11,94 @@ import {
 	CardTitle,
 } from "./ui/card";
 
-export default function CompanyInventoryView(props: { company_name: string }) {
+type Item = {
+	price: number;
+	picURL: string;
+};
+
+export default function CompanyInventoryView(props: {
+	company_name: string;
+	user: string;
+}) {
+	const [inventory, setInventory] = useState<
+		Record<string, Record<string, Item>>
+	>({});
+
+	useEffect(() => {
+		const fetchInventory = async () => {
+			const inventoryCollection = collection(
+				db,
+				"companies",
+				props.user,
+				"inventory"
+			);
+
+			const categoryDocs = await getDocs(inventoryCollection);
+			const data: Record<string, Record<string, Item>> = {};
+
+			for (const docSnap of categoryDocs.docs) {
+				const categoryName = docSnap.id;
+				data[categoryName] = docSnap.data() as Record<string, Item>;
+			}
+
+			setInventory(data);
+		};
+
+		fetchInventory();
+	}, [props.company_name]);
+
 	return (
 		<div className="flex flex-col gap-4 mt-2">
 			<h2 className="text-2xl text-gray-500 font-semibold">Inventory</h2>
 			<div className="flex flex-col gap-4">
-				<div className="flex flex-col gap-4">
-					<h4 className="text-lg font-semibold">Shoes</h4>
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-						{Array.from({ length: 4 }).map((_, i) => (
-							<Card key={i}>
-								<img
-									src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8fDA%3D"
-									alt="Product Image"
-									className="object-cover md:object-scale-down h-20 mx-auto"
-								/>
-								<CardHeader>
-									<CardTitle>Air jordan</CardTitle>
-									<CardDescription>$50.00</CardDescription>
-								</CardHeader>
-								<CardFooter>
-									<div className="flex justify-between w-full">
-										<Button
-											variant="secondary"
-											disabled
-											onClick={() => alert("Edit item")}
-										>
-											<Pen />
-										</Button>
-										<Button
-											variant="outline"
-											onClick={() => alert("Delete item")}
-										>
-											<Trash />
-										</Button>
-									</div>
-								</CardFooter>
-							</Card>
-						))}
+				{Object.entries(inventory).map(([category, items]) => (
+					<div key={category} className="flex flex-col gap-4">
+						<h4 className="text-lg font-semibold capitalize">
+							{category}
+						</h4>
+						<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+							{Object.entries(items).map(
+								([itemName, itemData], i) => (
+									<Card key={i}>
+										<img
+											src={itemData.picURL}
+											alt={itemName}
+											className="object-cover md:object-scale-down h-20 mx-auto"
+										/>
+										<CardHeader>
+											<CardTitle>{itemName}</CardTitle>
+											<CardDescription>
+												${itemData.price.toFixed(2)}
+											</CardDescription>
+										</CardHeader>
+										<CardFooter>
+											<div className="flex justify-between w-full">
+												<Button
+													variant="secondary"
+													disabled
+													onClick={() =>
+														alert("Edit item")
+													}
+												>
+													<Pen />
+												</Button>
+												<Button
+													variant="outline"
+													disabled
+													onClick={() =>
+														alert("Delete item")
+													}
+												>
+													<Trash />
+												</Button>
+											</div>
+										</CardFooter>
+									</Card>
+								)
+							)}
+						</div>
 					</div>
-				</div>
-
-				<div className="flex flex-col gap-4">
-					<h4 className="text-lg font-semibold">Shirts</h4>
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-						{Array.from({ length: 4 }).map((_, i) => (
-							<Card key={i}>
-								<img
-									src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c2hpcnRzfGVufDB8fDB8fHww"
-									alt="Product Image"
-									className="object-cover md:object-scale-down h-20 mx-auto"
-								/>
-								<CardHeader>
-									<CardTitle>Air jordan</CardTitle>
-									<CardDescription>$50.00</CardDescription>
-								</CardHeader>
-								<CardFooter>
-									<div className="flex justify-between w-full">
-										<Button
-											variant="secondary"
-											disabled
-											onClick={() => alert("Edit item")}
-										>
-											<Pen />
-										</Button>
-										<Button
-											variant="outline"
-											onClick={() => alert("Delete item")}
-										>
-											<Trash />
-										</Button>
-									</div>
-								</CardFooter>
-							</Card>
-						))}
-					</div>
-				</div>
+				))}
 			</div>
 		</div>
 	);

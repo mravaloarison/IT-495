@@ -3,11 +3,25 @@
 import { Image, MapPin, Pen, Plus, TriangleAlert } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AlertLocation from "./alert_location";
 import CompanyInventoryView from "./company_inventory";
 import AlertAddToInventory from "./alert_add_to_inventory";
 import AlertUpdatePersonalInfo from "./alert_to_update_PI";
+import {
+	updateLocation,
+	updateNameAndLogo,
+	getCompanyFromDB,
+	addToCompanyInventoryItem,
+} from "@/app/firebase_utils";
+import AlertError from "./alert_error";
+
+interface InventoryItem {
+	name: string;
+	image: string;
+	price: number;
+	category: string;
+}
 
 export default function CompanyView(props: { user: string }) {
 	const [isChangingLocation, setIsChangingLocation] = useState(false);
@@ -17,6 +31,73 @@ export default function CompanyView(props: { user: string }) {
 		useState(false);
 	const [isUpdatingCompanyDetailsOpen, setIsUpdatingCompanyDetailsOpen] =
 		useState(false);
+	const [logoURL, setLogoURL] = useState("/");
+	const [error, setError] = useState("");
+	const [isError, setIsError] = useState(false);
+
+	useEffect(() => {
+		getCompanyFromDB(props.user)
+			.then((data: any) => {
+				if (data) {
+					setCompanyName(data.companyName);
+				}
+				if (data.location) {
+					setLocation(data.location);
+				}
+
+				if (data.logoURL) {
+					setLogoURL(data.logoURL);
+				}
+			})
+			.catch((error) => {
+				console.error("Error fetching company data: ", error);
+			});
+	}, [props.user]);
+
+	const handleOnChangePersonalInfo = (
+		companyName: string,
+		logoURL: string
+	) => {
+		setCompanyName(companyName);
+		setLogoURL(logoURL);
+
+		updateNameAndLogo("companies", props.user, {
+			companyName: companyName,
+			logoURL: logoURL,
+		});
+
+		setIsUpdatingCompanyDetailsOpen(false);
+	};
+
+	const handleOnChangeLocation = (newLocation: string) => {
+		setLocation(newLocation);
+
+		updateLocation("companies", props.user, newLocation);
+
+		setIsChangingLocation(false);
+	};
+
+	const handleOnAddToInventory = (item: InventoryItem) => {
+		console.log("Item added to inventory: ", item);
+
+		addToCompanyInventoryItem({
+			email: props.user,
+			category: item.category,
+			itemName: item.name,
+			price: item.price,
+			picURL: item.image,
+		})
+			.then(() => {
+				console.log("Item added to inventory successfully");
+			})
+			.catch((error) => {
+				console.error("Error adding item to inventory: ", error);
+				setError("Error adding item to inventory: " + error);
+				setIsError(true);
+			});
+
+		setIsAddingToInventoryOpen(false);
+	};
 
 	return (
 		<div className="">
@@ -27,10 +108,18 @@ export default function CompanyView(props: { user: string }) {
 					onClick={() => setIsUpdatingCompanyDetailsOpen(true)}
 				>
 					<div className="rounded-full border flex items-center justify-center">
-						<Image className="m-2" />
+						{logoURL ? (
+							<img
+								src={logoURL}
+								alt="Picture"
+								className="w-8 h-8 rounded-full object-cover object-center"
+							/>
+						) : (
+							<Image className="m-2" />
+						)}
 					</div>
 					<h1 className="text-2xl font-semibold underline">
-						Company Name
+						{companyName}
 					</h1>
 					<div className="p-2 w-8 h-8 flex items-center justify-center">
 						<Pen />
@@ -75,39 +164,37 @@ export default function CompanyView(props: { user: string }) {
 				<div></div>
 			</div>
 
-			<CompanyInventoryView company_name={companyName} />
+			<CompanyInventoryView
+				company_name={companyName}
+				user={props.user}
+			/>
 
 			<AlertLocation
 				user={props.user}
 				isOpen={isChangingLocation}
 				curentLocation={location}
-				callback={(newLocation) => {
-					setLocation(newLocation);
-					console.log("New location: ", newLocation);
-					console.log(isChangingLocation);
-					setIsChangingLocation(false);
-				}}
+				callback={handleOnChangeLocation}
 			/>
 
 			<AlertAddToInventory
 				isOpen={isAddingToInventoryOpen}
 				onOpenChange={setIsAddingToInventoryOpen}
-				onConfirm={(item) => {
-					console.log("Item added to inventory: ", item);
-					setIsAddingToInventoryOpen(false);
-				}}
+				onConfirm={handleOnAddToInventory}
 			/>
 
 			<AlertUpdatePersonalInfo
 				isOpen={isUpdatingCompanyDetailsOpen}
 				user={props.user}
 				onOpenChange={setIsUpdatingCompanyDetailsOpen}
-				onConfirm={(companyName, location) => {
-					setCompanyName(companyName);
-					setLocation(location);
-					console.log("Company name: ", companyName);
-					console.log("Location: ", location);
-					setIsUpdatingCompanyDetailsOpen(false);
+				onConfirm={handleOnChangePersonalInfo}
+			/>
+
+			<AlertError
+				isOpen={isError}
+				errorMessage={error}
+				callback={() => {
+					setIsError(false);
+					setError("");
 				}}
 			/>
 		</div>
