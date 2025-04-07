@@ -24,7 +24,7 @@ export default function CustomerNavView() {
 				<Button
 					key={index}
 					variant="link"
-					className="hover:cursor-pointer"
+					className="hover:cursor-pointer flex flex-col gap-2 md:flex-row md:gap-2"
 					size="sm"
 					onClick={() => {
 						window.location.href = menu.link;

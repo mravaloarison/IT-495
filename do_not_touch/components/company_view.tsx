@@ -137,7 +137,7 @@ export default function CompanyView(props: { user: string }) {
 									No location set
 								</div>
 							) : (
-								<div className="text-gray-500 p-2 flex gap-2 items-center truncate">
+								<div className="text-gray-500 p-2 flex gap-2 items-center truncate max-w-72 md:max-w-full">
 									<MapPin />
 									{location}
 								</div>
