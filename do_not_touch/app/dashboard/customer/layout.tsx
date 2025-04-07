@@ -36,7 +36,9 @@ export default function Page({ children }: { children: React.ReactNode }) {
 						<header className="flex justify-between items-center w-full border-b pb-4">
 							<div className="flex gap-2 items-center text-gray-500 hover:cursor-pointer">
 								<Settings />
-								<h1 className="font-semibold ">{user}</h1>
+								<h1 className="font-semibold max-w-52 md:max-w-full truncate">
+									{user}
+								</h1>
 							</div>
 							<Button
 								variant="outline"
