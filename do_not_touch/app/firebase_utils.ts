@@ -1,6 +1,6 @@
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import { doc, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDqOD6L7bshB9-PRQ3UGccvZa_hQKwO0nI",
@@ -158,4 +158,44 @@ export async function addToCompanyInventoryItem({
       picURL: picURL,
     },
   }, { merge: true });
+}
+
+// CART AND SAVED ITEMS
+export async function addItemToSaved(
+	email: string,
+	item: { itemName: string; price: number; picURL: string; company: string }
+) {
+	const itemRef = doc(db, "customers", email, "saved", item.itemName);
+	await setDoc(itemRef, item);
+}
+
+export async function addItemToCart(
+	email: string,
+	item: { itemName: string; price: number; picURL: string; company: string }
+): Promise<number> {
+	const itemRef = doc(db, "customers", email, "cart", item.itemName);
+	const itemSnap = await getDoc(itemRef);
+
+	let newCount = 1;
+
+	if (itemSnap.exists()) {
+		const data = itemSnap.data();
+		newCount = (data.count || 1) + 1;
+	}
+
+	await setDoc(itemRef, {
+		...item,
+		count: newCount,
+	});
+
+	return newCount;
+}
+
+export async function removeItemFromList(
+	email: string,
+	list: "saved" | "cart",
+	itemName: string
+) {
+	const itemRef = doc(db, "customers", email, list, itemName);
+	await deleteDoc(itemRef);
 }

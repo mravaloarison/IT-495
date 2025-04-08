@@ -3,6 +3,20 @@
 import { Button } from "./ui/button";
 import { ArrowLeft, Eye, Heart, ShoppingBag } from "lucide-react";
 
+import {
+	addItemToCart,
+	addItemToSaved,
+	removeItemFromList,
+} from "@/app/firebase_utils";
+import { auth } from "@/app/firebase_utils";
+
+import { getDoc, doc } from "firebase/firestore";
+
+import { useEffect, useState } from "react";
+import { db } from "@/app/firebase_utils";
+
+import { toast } from "sonner";
+
 type InventoryItem = {
 	itemName: string;
 	price: number;
@@ -30,6 +44,37 @@ export default function CompanyCard({
 	isLoading = false,
 }: CompanyCardProps) {
 	const isActive = typeof onBack === "function";
+
+	const [savedItems, setSavedItems] = useState<Set<string>>(new Set());
+
+	useEffect(() => {
+		const fetchSaved = async () => {
+			const user = auth.currentUser;
+			if (!user) return;
+
+			const savedSet = new Set<string>();
+
+			await Promise.all(
+				items.map(async (item) => {
+					const docRef = doc(
+						db,
+						"customers",
+						user.email || "",
+						"saved",
+						item.itemName
+					);
+					const docSnap = await getDoc(docRef);
+					if (docSnap.exists()) {
+						savedSet.add(item.itemName);
+					}
+				})
+			);
+
+			setSavedItems(savedSet);
+		};
+
+		if (items.length > 0) fetchSaved();
+	}, [items]);
 
 	if (!isActive) {
 		return (
@@ -93,11 +138,83 @@ export default function CompanyCard({
 							<p className="font-medium">{item.itemName}</p>
 							<p className="text-gray-600">${item.price}</p>
 							<div className="flex justify-between mt-4">
-								<Button variant="outline" disabled>
-									<Heart />
+								<Button
+									variant="outline"
+									onClick={async () => {
+										const user = auth.currentUser;
+										if (!user) return;
+
+										const itemName = item.itemName;
+										const userEmail = user.email || "";
+
+										if (savedItems.has(itemName)) {
+											await removeItemFromList(
+												userEmail,
+												"saved",
+												itemName
+											);
+											setSavedItems((prev) => {
+												const newSet = new Set(prev);
+												newSet.delete(itemName);
+												return newSet;
+											});
+										} else {
+											await addItemToSaved(userEmail, {
+												itemName,
+												price: item.price,
+												picURL: item.picURL,
+												company: companyName,
+											});
+											setSavedItems((prev) =>
+												new Set(prev).add(itemName)
+											);
+										}
+									}}
+								>
+									<Heart
+										className={
+											savedItems.has(item.itemName)
+												? "fill-red-500 text-red-500"
+												: ""
+										}
+									/>
 									Save
 								</Button>
-								<Button variant="secondary" disabled>
+
+								<Button
+									variant="secondary"
+									onClick={async () => {
+										const user = auth.currentUser;
+										if (!user) return;
+
+										try {
+											const count = await addItemToCart(
+												user.email || "",
+												{
+													itemName: item.itemName,
+													price: item.price,
+													picURL: item.picURL,
+													company: companyName,
+												}
+											);
+											toast.success(
+												`Added to cart${
+													count > 1
+														? ` (x${count})`
+														: ""
+												}`
+											);
+										} catch (err) {
+											console.error(
+												"Failed to add to cart",
+												err
+											);
+											toast.error(
+												"Failed to add to cart"
+											);
+										}
+									}}
+								>
 									<ShoppingBag />
 									Add to cart
 								</Button>
