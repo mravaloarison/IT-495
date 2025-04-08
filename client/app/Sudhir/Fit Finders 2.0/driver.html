@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard - FitFinders</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #333333;
+            --light-color: #ffffff;
+            --background-color: #f7f7f7;
+            --accent-color: #5dade2;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --danger-color: #F44336;
+            --info-color: #2196F3;
+            --border-color: #ddd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--secondary-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--light-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-color);
+            font-weight: bold;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 70px);
+        }
+        
+        .sidebar {
+            background-color: var(--light-color);
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .sidebar-nav a.active {
+            font-weight: 600;
+        }
+        
+        .nav-icon {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .driver-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 10px auto;
+            display: block;
+            border: 3px solid var(--primary-color);
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .stat-change {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--success-color);
+        }
+        
+        .stat-card .stat-change.negative {
+            color: var(--danger-color);
+        }
+        
+        .recent-activity, .upcoming-deliveries {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .section-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .section-header a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .delivery-list {
+            list-style: none;
+        }
+        
+        .delivery-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .delivery-item:last-child {
+            border-bottom: none;
+        }
+        
+        .delivery-info {
+            flex-grow: 1;
+        }
+        
+        .delivery-info h4 {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        
+        .delivery-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .delivery-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 1rem;
+        }
+        
+        .status-completed {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status-in-progress {
+            background-color: rgba(33, 150, 243, 0.1);
+            color: var(--info-color);
+        }
+        
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--light-color);
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .copyright {
+            margin-top: 1rem;
+            width: 100%;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .footer-links {
+                margin-top: 1rem;
+            }
+            
+            .footer-links li {
+                margin: 0 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">FitFinders</a>
+                <div class="user-info">
+                    <div class="user-avatar">SS</div>
+                    <span>Sam Smith</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active"><span class="nav-icon">📊</span> Dashboard</a></li>
+                <li><a href="#"><span class="nav-icon">🚚</span> Deliveries</a></li>
+                <li><a href="#"><span class="nav-icon">💰</span> Earnings</a></li>
+                <li><a href="#"><span class="nav-icon">📅</span> Schedule</a></li>
+                <li><a href="#"><span class="nav-icon">⭐</span> Performance</a></li>
+                <li><a href="#"><span class="nav-icon">⚙️</span> Settings</a></li>
+                <li><a href="#"><span class="nav-icon">❓</span> Help & Support</a></li>
+                <li><a href="#"><span class="nav-icon">🚪</span> Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="dashboard-header">
+                <h1>Welcome back, Sam!</h1>
+                <img src="samsmith.png" alt="Sam Smith" class="driver-photo">
+                <p>Here's your driver activity overview for today</p>
+            </div>
+
+            <div class="quick-actions">
+                <a href="#" class="btn">Start Delivering</a>
+                <a href="#" class="btn btn-outline">View Schedule</a>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Today's Deliveries</h3>
+                    <div class="stat-value">8</div>
+                    <div class="stat-change">+2 from yesterday</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Today's Earnings</h3>
+                    <div class="stat-value">$124.50</div>
+                    <div class="stat-change">+$18.25 from yesterday</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Customer Rating</h3>
+                    <div class="stat-value">4.9 <small>/ 5</small></div>
+                    <div class="stat-change">+0.1 from last week</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Acceptance Rate</h3>
+                    <div class="stat-value">92%</div>
+                    <div class="stat-change negative">-3% from last week</div>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="upcoming-deliveries">
+                    <div class="section-header">
+                        <h2>Upcoming Deliveries</h2>
+                        <a href="#">View All</a>
+                    </div>
+                    <ul class="delivery-list">
+                        <li class="delivery-item">
+                            <div class="delivery-info">
+                                <h4>Order #FIT-2458</h4>
+                                <p>Athletic T-Shirts (3) - 1.2 miles away</p>
+                                <p>Pickup: 2:30 PM - Delivery by: 3:15 PM</p>
+                            </div>
+                            <span class="delivery-status status-pending">Pending</span>
+                        </li>
+                        <li class="delivery-item">
+                            <div class="delivery-info">
+                                <h4>Order #FIT-2461</h4>
+                                <p>Running Shoes, Compression Socks - 2.5 miles away</p>
+                                <p>Pickup: 3:45 PM - Delivery by: 4:30 PM</p>
+                            </div>
+                            <span class="delivery-status status-pending">Pending</span>
+                        </li>
+                        <li class="delivery-item">
+                            <div class="delivery-info">
+                                <h4>Order #FIT-2467</h4>
+                                <p>Yoga Mat, Fitness Band Set - 3.8 miles away</p>
+                                <p>Pickup: 5:00 PM - Delivery by: 5:45 PM</p>
+                            </div>
+                            <span class="delivery-status status-pending">Pending</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="recent-activity">
+                    <div class="section-header">
+                        <h2>Recent Activity</h2>
+                        <a href="#">View All</a>
+                    </div>
+                    <ul class="delivery-list">
+                        <li class="delivery-item">
+                            <div class="delivery-info">
+                                <h4>Order #FIT-2445</h4>
+                                <p>Workout Outfit Bundle - 1.5 miles</p>
+                                <p>Completed at 1:25 PM - $15.75 earned</p>
+                            </div>
+                            <span class="delivery-status status-completed">Completed</span>
+                        </li>
+                        <li class="delivery-item">
+                            <div class="delivery-info">
+                                <h4>Order #FIT-2443</h4>
+                                <p>Tennis Racket, Sportswear - 3.2 miles</p>
+                                <p>Completed at 12:10 PM - $18.50 earned</p>
+                            </div>
+                            <span class="delivery-status status-completed">Completed</span>
+                        </li>
+                        <li class="delivery-item">
+                            <div class="delivery-info">
+                                <h4>Order #FIT-2438</h4>
+                                <p>Fitness Tracker Watch - 2.7 miles</p>
+                                <p>Completed at 10:45 AM - $14.25 earned</p>
+                            </div>
+                            <span class="delivery-status status-completed">Completed</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="weekly-summary">
+                <div class="section-header">
+                    <h2>Weekly Performance Summary</h2>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <h3>Weekly Deliveries</h3>
+                        <div class="stat-value">42</div>
+                        <div class="stat-change">+5 from last week</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Weekly Earnings</h3>
+                        <div class="stat-value">$685.25</div>
+                        <div class="stat-change">+$72.50 from last week</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>On-time Rate</h3>
+                        <div class="stat-value">98%</div>
+                        <div class="stat-change">+2% from last week</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Distance</h3>
+                        <div class="stat-value">128.5 <small>mi</small></div>
+                        <div class="stat-change">-12.3 mi from last week</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <ul class="footer-links">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">Returns Policy</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                © 2025 FitFinders. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
