@@ -216,7 +216,7 @@ export default function ChatBox() {
 				<Textarea
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
-					placeholder="Ask Gemini something..."
+					placeholder="Ask FitFinder.AI something..."
 					className="resize-none pr-16 md:pr-12"
 					onKeyDown={(e) => {
 						if (e.key === "Enter" && !e.shiftKey) {
