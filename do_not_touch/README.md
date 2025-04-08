@@ -1,22 +1,24 @@
-## Links
-
--   [Live](https://fit--finder.vercel.app)
--   [Github](https://github.com/mravaloarison/IT-495/tree/main/do_not_touch)
-
----
 # FitFinder — Fashion Delivery & AI Styling Assistant
 
 Built it to explore and experiment with Google's ecosystem — including `Firebase Auth`, `Firestore`, `Gemini AI`, and `Google Places API`.
 
-The web app that lets users:
+The web app lets users:
 
 -   Browse fashion stores and their inventories
 -   Order clothes, shoes, and accessories for delivery
 -   Chat with an AI fashion assistant for outfit advice
 -   Search locations using Google Places autocomplete
 
+---
 
-## Smart Cart Features for customer
+## Links
+
+-   [Live](https://fit--finder.vercel.app)
+-   [Github](https://github.com/mravaloarison/IT-495/tree/main/do_not_touch)
+
+---
+
+## Smart Cart Features for Customer
 
 FitFinder's cart now behaves just like you'd expect from a real e-commerce app:
 
@@ -27,16 +29,20 @@ FitFinder's cart now behaves just like you'd expect from a real e-commerce app:
 
 These additions make the cart fully interactive while preserving Firebase-backed state.
 
-## Other Features
+---
 
-### Store Browser
+## Inventory Management (Company Side)
 
--   Loads all registered companies from Firestore
--   When a store is clicked, fetches its inventory from:
-    `companies/{email}/inventory/{category}`
--   Items are stored as fields under each category document
+-   Items are stored under: `companies/{email}/inventory/{category}`
+-   Each item is a field in a document matching its category
+-   Items can be:
+    -   Added with an Alert dialog
+    -   Edited with a pre-filled modal
+    -   Deleted directly via button
+-   State is updated in real-time with `setInventory(...)` — no page refresh needed
+-   Toast feedback on all actions
 
-Example structure:
+**Example Firestore document:**
 
 ```json
 {
@@ -46,6 +52,28 @@ Example structure:
 	}
 }
 ```
+
+**Update Logic (edit/delete):**
+
+```ts
+// delete old
+await updateDoc(oldRef, { [oldName]: deleteField() });
+
+// insert new
+await updateDoc(newRef, {
+	[newName]: { price, picURL },
+});
+```
+
+---
+
+## Other Features
+
+### Store Browser
+
+-   Loads all registered companies from Firestore
+-   When a store is clicked, fetches its inventory from:
+    `companies/{email}/inventory/{category}`
 
 ### Inventory Fetching
 
@@ -61,6 +89,7 @@ Object.entries(data).forEach(([itemName, value]: any) => {
 });
 ```
 
+---
 
 ### Chat with FitFinder.AI
 
@@ -69,6 +98,8 @@ Powered by Gemini AI via `/api/chat`
 -   Assistant gives fashion advice, style tips, outfit suggestions
 -   Styled message bubbles (user vs assistant)
 -   Includes avatars, timestamps, and typing animation
+
+---
 
 ### Google Places Autocomplete
 
@@ -90,6 +121,8 @@ const response = await fetch(
 );
 ```
 
+---
+
 ## Firebase Integration
 
 ### Firestore Console
@@ -97,9 +130,9 @@ const response = await fetch(
 Sample Screenshots of the Firestore console:
 
 ![Screenshot 1](./public/FitFinder10.png)
-
 ![Screenshot 2](./public/FitFinder9.png)
 
+---
 
 ### User & Collection Management
 
@@ -128,7 +161,9 @@ updateNameAndLogo("drivers", email, { fullName, logoURL });
 updateLocation("companies", email, location);
 ```
 
-### Inventory Management
+---
+
+### Inventory API
 
 Add an item to a company’s inventory under a category:
 
