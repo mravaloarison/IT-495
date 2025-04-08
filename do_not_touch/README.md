@@ -1,36 +1,156 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Links
 
-## Getting Started
+- [Live](https://fitfinder.vercel.app)
+- [Github](https://github.com/mravaloarison/IT-495/tree/main/do_not_touch)
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# FitFinder — Fashion Delivery & AI Styling Assistant
+
+FitFinder is a web app that lets users:
+
+-   Browse fashion stores and their inventories
+-   Order clothes, shoes, and accessories for delivery
+-   Chat with an AI fashion assistant for outfit advice
+-   Search locations using Google Places autocomplete
+
+## Features
+
+### Store Browser
+
+-   Loads all registered companies from Firestore
+-   When a store is clicked, fetches its inventory from:
+    `companies/{email}/inventory/{category}`
+-   Items are stored as fields under each category document
+
+Example structure:
+
+```json
+{
+	"Nike Hoodie": {
+		"price": 45,
+		"picURL": "https://example.com/hoodie.jpg"
+	}
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Inventory Fetching
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Each company’s inventory is flattened like this:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```ts
+Object.entries(data).forEach(([itemName, value]: any) => {
+	allItems.push({
+		itemName,
+		price: value.price,
+		picURL: value.picURL,
+	});
+});
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+### Chat with FitFinder.AI
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Powered by Gemini AI via `/api/chat`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+-   Assistant gives fashion advice, style tips, outfit suggestions
+-   Styled message bubbles (user vs assistant)
+-   Includes avatars, timestamps, and typing animation
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Google Places Autocomplete
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Handled server-side with a POST request:
+
+```ts
+const response = await fetch(
+	"https://places.googleapis.com/v1/places:searchText",
+	{
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"X-Goog-Api-Key": API_KEY,
+			"X-Goog-FieldMask":
+				"places.displayName,places.formattedAddress,places.id",
+		},
+		body: JSON.stringify({ textQuery: searchQuery, pageSize: 3 }),
+	}
+);
+```
+
+## Firebase Integration
+
+### Setup
+
+```ts
+const firebaseConfig = {
+	apiKey: "...",
+	authDomain: "...",
+	projectId: "doordashfashion",
+	storageBucket: "...",
+	messagingSenderId: "...",
+	appId: "...",
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
+```
+
+---
+
+### User & Collection Management
+
+**Add user to Firestore:**
+
+```ts
+await setDoc(doc(db, "users", email), userData);
+```
+
+**Check if user exists:**
+
+```ts
+const exists = (await getDoc(doc(db, "users", email))).exists();
+```
+
+**Add to Customers/Drivers/Companies:**
+
+-   `addUserToCustomerDB(data)`
+-   `addUserToDriverDB(data)`
+-   `addUserToCompanyDB(data)`
+
+**Update name/logo or location:**
+
+```ts
+updateNameAndLogo("drivers", email, { fullName, logoURL });
+updateLocation("companies", email, location);
+```
+
+---
+
+### Inventory Management
+
+Add an item to a company’s inventory under a category:
+
+```ts
+await setDoc(
+	doc(db, "companies", email, "inventory", category),
+	{
+		[itemName]: {
+			price,
+			picURL,
+		},
+	},
+	{ merge: true }
+);
+```
+
+## Tech Stack
+
+-   Next.js
+-   Firebase Firestore + Auth
+-   Google Places API
+-   Gemini AI
+-   TailwindCSS
+-   Lucide Icons
