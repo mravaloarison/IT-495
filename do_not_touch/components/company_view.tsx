@@ -162,7 +162,6 @@ export default function CompanyView(props: { user: string }) {
 						Add more to your inventroy
 					</Button>
 				</div>
-				<div></div>
 			</div>
 
 			<CompanyInventoryView
