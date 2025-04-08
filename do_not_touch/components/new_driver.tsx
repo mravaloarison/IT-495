@@ -16,6 +16,8 @@ import AlertError from "./alert_error";
 import { addUserToDB, addUserToDriverDB, auth } from "@/app/firebase_utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { Lock } from "lucide-react";
+import { AlertDestructive } from "./alert_driver";
 
 export default function NewDriverView() {
 	const router = useRouter();
@@ -140,12 +142,14 @@ export default function NewDriverView() {
 				<CardDescription>
 					Sign up to create a new Driver account.
 				</CardDescription>
+				<AlertDestructive />
 			</CardHeader>
 			<CardContent className="space-y-4">
 				<div className="space-y-2">
 					<Label htmlFor="fullname">Fullname</Label>
 					<Input
 						placeholder="Fullname"
+						disabled
 						value={fullname}
 						onChange={handleFullnameChange}
 					/>
@@ -155,6 +159,7 @@ export default function NewDriverView() {
 					<Input
 						type="email"
 						placeholder="Email"
+						disabled
 						value={email}
 						onChange={handleEmailChange}
 					/>
@@ -164,6 +169,7 @@ export default function NewDriverView() {
 					<Input
 						type="password"
 						placeholder="Password"
+						disabled
 						value={password}
 						onChange={handlePasswordChange}
 					/>
@@ -173,6 +179,7 @@ export default function NewDriverView() {
 					<Input
 						type="password"
 						placeholder="Confirm Password"
+						disabled
 						value={confirmPassword}
 						onChange={handleConfirmPasswordChange}
 					/>
@@ -181,6 +188,7 @@ export default function NewDriverView() {
 					<Label htmlFor="phone_number">Phone number</Label>
 					<Input
 						placeholder="Phone number"
+						disabled
 						value={phoneNumber}
 						onChange={handlePhoneNumberChange}
 					/>
@@ -191,6 +199,7 @@ export default function NewDriverView() {
 					</Label>
 					<Input
 						placeholder="Driver license number"
+						disabled
 						value={driverLicenseNumber}
 						onChange={handleDriverLicenseNumberChange}
 					/>
@@ -200,8 +209,9 @@ export default function NewDriverView() {
 				<Button
 					className="hover:cursor-pointer"
 					onClick={handleSubmit}
-					disabled={loading}
+					disabled
 				>
+					<Lock />
 					{loading ? "Loading..." : "Sign up"}
 				</Button>
 			</CardFooter>

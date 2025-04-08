@@ -148,6 +148,7 @@ export default function CompanyView(props: { user: string }) {
 								variant="outline"
 								onClick={() => setIsChangingLocation(true)}
 							>
+								<MapPin />
 								Change location
 							</Button>
 						</CardFooter>

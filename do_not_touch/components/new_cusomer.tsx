@@ -16,6 +16,7 @@ import AlertError from "./alert_error";
 import { addUserToCustomerDB, addUserToDB, auth } from "@/app/firebase_utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { UserRoundPen } from "lucide-react";
 
 export default function NewCustomerView() {
 	const router = useRouter();
@@ -172,7 +173,8 @@ export default function NewCustomerView() {
 					onClick={handleSubmit}
 					disabled={loading}
 				>
-					{loading ? "Loading..." : "Sign up"}
+					<UserRoundPen />
+					{loading ? "Loading..." : "Create account"}
 				</Button>
 			</CardFooter>
 			<AlertError

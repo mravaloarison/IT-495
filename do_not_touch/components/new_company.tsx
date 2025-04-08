@@ -16,6 +16,7 @@ import AlertError from "./alert_error";
 import { addUserToCompanyDB, addUserToDB, auth } from "@/app/firebase_utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { UserRoundPen } from "lucide-react";
 
 export default function NewCompanyView() {
 	const router = useRouter();
@@ -179,7 +180,8 @@ export default function NewCompanyView() {
 					disabled={loading}
 					className="hover:cursor-pointer"
 				>
-					{loading ? "Loading..." : "Sign up"}
+					<UserRoundPen />
+					{loading ? "Loading..." : "Create company account"}
 				</Button>
 			</CardFooter>
 			<AlertError
