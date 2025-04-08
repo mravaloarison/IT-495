@@ -7,7 +7,7 @@
 
 # FitFinder — Fashion Delivery & AI Styling Assistant
 
-Built it to explore and experiment with Google's ecosystem — including Firebase Auth, Firestore, Gemini AI, and Google Places API.
+Built it to explore and experiment with Google's ecosystem — including `Firebase Auth`, `Firestore`, `Gemini AI`, and `Google Places API`.
 
 The web app that lets users:
 
@@ -84,6 +84,15 @@ const response = await fetch(
 
 ## Firebase Integration
 
+### Firestore Console
+
+Sample Screenshots of the Firestore console:
+
+![Screenshot 1](./public/FitFinder10.png)
+
+![Screenshot 2](./public/FitFinder9.png)
+
+
 ### Setup
 
 ```ts
@@ -148,12 +157,3 @@ await setDoc(
 	{ merge: true }
 );
 ```
-
-## Tech Stack
-
--   Next.js
--   Firebase Firestore + Auth
--   Google Places API
--   Gemini AI
--   TailwindCSS
--   Lucide Icons
