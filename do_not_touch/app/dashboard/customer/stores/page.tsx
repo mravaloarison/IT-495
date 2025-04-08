@@ -19,6 +19,8 @@ export default function Page() {
 			const companiesRef = collection(db, "companies");
 			const snapshot = await getDocs(companiesRef);
 
+			console.log(snapshot);
+
 			const data: Company[] = snapshot.docs.map((doc) => {
 				const d = doc.data();
 				return {
