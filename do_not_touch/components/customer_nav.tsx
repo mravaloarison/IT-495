@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Home, Save, ShoppingBag, Store } from "lucide-react";
+import { Heart, Home, ShoppingBag, Store } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 
@@ -12,7 +12,11 @@ export default function CustomerNavView() {
 	const menus = [
 		{ name: "Home", icon: <Home />, link: "/dashboard" },
 		{ name: "Stores", icon: <Store />, link: "/dashboard/customer/stores" },
-		{ name: "Saved", icon: <Save />, link: "/dashboard/customer/payments" },
+		{
+			name: "Saved",
+			icon: <Heart />,
+			link: "/dashboard/customer/payments",
+		},
 		{
 			name: "My cart",
 			icon: <ShoppingBag />,
