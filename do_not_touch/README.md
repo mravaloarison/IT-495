@@ -1,8 +1,7 @@
 ## Links
 
-- [Live](https://fitfinder.vercel.app)
-- [Github](https://github.com/mravaloarison/IT-495/tree/main/do_not_touch)
-
+-   [Live](https://fit--finder.vercel.app)
+-   [Github](https://github.com/mravaloarison/IT-495/tree/main/do_not_touch)
 
 # FitFinder — Fashion Delivery & AI Styling Assistant
 
