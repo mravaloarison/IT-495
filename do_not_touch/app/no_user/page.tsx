@@ -22,6 +22,8 @@ export default function NoUser() {
 		}
 	}, []);
 
+	console.log(leaving);
+
 	const handleRouteChange = (path: string) => {
 		if (containerRef.current) {
 			setLeaving(true);
