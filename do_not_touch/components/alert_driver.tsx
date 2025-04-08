@@ -6,7 +6,7 @@ export function AlertDestructive() {
 	return (
 		<Alert variant="destructive">
 			<AlertCircle className="h-4 w-4" />
-			<AlertTitle>Error</AlertTitle>
+			<AlertTitle>Hey there</AlertTitle>
 			<AlertDescription>
 				This option is not available yet. Please check back later.
 			</AlertDescription>

@@ -104,7 +104,6 @@ export default function CustomerView(props: { user: string }) {
 								</div>
 							) : (
 								<div className="text-gray-500 p-2 flex gap-2 items-center truncate max-w-72 md:max-w-full">
-									<MapPin />
 									{location}
 								</div>
 							)}
@@ -114,6 +113,7 @@ export default function CustomerView(props: { user: string }) {
 								variant="outline"
 								onClick={() => setIsChangingLocation(true)}
 							>
+								<MapPin />
 								Change location
 							</Button>
 						</CardFooter>
