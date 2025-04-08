@@ -93,11 +93,11 @@ export default function CompanyCard({
 							<p className="font-medium">{item.itemName}</p>
 							<p className="text-gray-600">${item.price}</p>
 							<div className="flex justify-between mt-4">
-								<Button variant="outline">
+								<Button variant="outline" disabled>
 									<Heart />
 									Save
 								</Button>
-								<Button variant="secondary">
+								<Button variant="secondary" disabled>
 									<ShoppingBag />
 									Add to cart
 								</Button>
