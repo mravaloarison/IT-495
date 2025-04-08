@@ -3,9 +3,13 @@
 -   [Live](https://fit--finder.vercel.app)
 -   [Github](https://github.com/mravaloarison/IT-495/tree/main/do_not_touch)
 
+---
+
 # FitFinder — Fashion Delivery & AI Styling Assistant
 
-FitFinder is a web app that lets users:
+Built it to explore and experiment with Google's ecosystem — including Firebase Auth, Firestore, Gemini AI, and Google Places API.
+
+The web app that lets users:
 
 -   Browse fashion stores and their inventories
 -   Order clothes, shoes, and accessories for delivery
