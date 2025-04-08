@@ -1,4 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Button } from "./ui/button";
+import { Link2 } from "lucide-react";
 
 interface CompanyCardProps {
 	logoURL: string;
@@ -24,6 +32,12 @@ export default function CompanyCard({
 				<CardTitle className="text-lg">{companyName}</CardTitle>
 				<p className="text-sm text-muted-foreground">{location}</p>
 			</CardContent>
+			<CardFooter>
+				<Button className="w-full" variant="secondary">
+					<Link2 />
+					Visit
+				</Button>
+			</CardFooter>
 		</Card>
 	);
 }

@@ -35,15 +35,18 @@ export default function Page() {
 	}, []);
 
 	return (
-		<div className="md:grid md:grid-cols-3 flex flex-col items-center gap-4 p-4">
-			{companies.map((company, i) => (
-				<CompanyCard
-					key={i}
-					logoURL={company.logoURL}
-					companyName={company.companyName}
-					location={company.location}
-				/>
-			))}
+		<div>
+			<h1 className="text-2xl font-bold pb-4 pt-6">Stores</h1>
+			<div className="md:grid md:grid-cols-3 flex flex-col items-center gap-4 p-4">
+				{companies.map((company, i) => (
+					<CompanyCard
+						key={i}
+						logoURL={company.logoURL}
+						companyName={company.companyName}
+						location={company.location}
+					/>
+				))}
+			</div>
 		</div>
 	);
 }
