@@ -78,8 +78,6 @@ export default function NewCustomerView() {
 					.then(() => {
 						addUserToCustomerDB(data)
 							.then(() => {
-								setLoading(false);
-
 								router.replace("/dashboard");
 								router.refresh();
 							})

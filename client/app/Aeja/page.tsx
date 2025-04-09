@@ -1,7 +1,5 @@
 export default function Page() {
-    return (
-        <>
-            Hello from Aeja
-        </>
-    )
+	// logic
+
+	return <>Hello from Aeja</>;
 }

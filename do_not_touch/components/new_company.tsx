@@ -85,8 +85,6 @@ export default function NewCompanyView() {
 					.then(() => {
 						addUserToCompanyDB(data)
 							.then(() => {
-								setLoading(false);
-
 								router.replace("/dashboard");
 								router.refresh();
 							})
